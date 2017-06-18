@@ -25,6 +25,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -128,6 +129,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
             cnuUser.setPictureUrl(facebookUser.getPicture());
             cnuUser.setName(facebookUser.getName());
             cnuUser.setGender(facebookUser.getGender());
+            cnuUser.setLikeAt(new Date());
             cnuUser = userRepository.save(cnuUser);
         }
         return cnuUser;

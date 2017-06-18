@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -46,6 +48,20 @@ public class BoardService {
 
     public boolean likeBoard(CnuUser cnuUser, int idx) {
         Board board = boardRepository.findByIdx(idx);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date userDate=null;
+        Date currentDate=null;
+        try {
+            userDate = dateFormat.parse(dateFormat.format(cnuUser.getLikeAt()));
+            currentDate = dateFormat.parse(dateFormat.format(new Date()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (userDate.compareTo(currentDate)<0){
+            cnuUser.setLikeAt(new Date());
+            cnuUser.setCountDisLike(0);
+            cnuUser.setCountLike(0);
+        }
         if (cnuUser.getCountLike()<3){
             board.setCountLike(board.getCountLike()+1);
             cnuUser.setCountLike(cnuUser.getCountLike()+1);
@@ -60,6 +76,22 @@ public class BoardService {
 
     public boolean disLikeBoard(CnuUser cnuUser, int idx) {
         Board board = boardRepository.findByIdx(idx);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date userDate=null;
+        Date currentDate=null;
+        try {
+            userDate = dateFormat.parse(dateFormat.format(cnuUser.getLikeAt()));
+            currentDate = dateFormat.parse(dateFormat.format(new Date()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (userDate.compareTo(currentDate)<0){
+            cnuUser.setLikeAt(new Date());
+            cnuUser.setCountDisLike(0);
+            cnuUser.setCountLike(0);
+        }
+
         if (cnuUser.getCountDisLike()<3){
             board.setCountDisLike(board.getCountDisLike()+1);
             cnuUser.setCountDisLike(cnuUser.getCountDisLike()+1);
